@@ -46,6 +46,10 @@ void put(int value) {
 	struct regularNode *temp = (struct regularNode *)malloc(sizeof(struct regularNode));
 	temp->value = value;
 	temp->pointer = NULL;
+	if (qTemp == NULL) {
+		createQueue(value);
+		return;
+	}
 	while (qTemp != NULL) {
 		if (qTemp->rear->value == value) {
 			qTemp->rear->pointer = temp;
@@ -53,6 +57,8 @@ void put(int value) {
 			return;
 		}
 		if (qTemp->pointer == NULL) {
+			createQueue(value);
+			return;
 		}
 		qTemp = qTemp->pointer;
 	}
@@ -103,37 +109,29 @@ int main(int argc, char** argv) {
 	while (1) {
 		system("cls");
 		printf("MENU DA FILA COM PONTEIROS\n\n");
-		printf("\tCriar Fila_______[1]\n");
-		printf("\tInserir Item_____[2]\n");
-		printf("\tRemover Item_____[3]\n");
-		printf("\tImprimir Filas___[4]\n");
+		printf("\tInserir Item_____[1]\n");
+		printf("\tRemover Item_____[2]\n");
+		printf("\tImprimir Filas___[3]\n");
 		printf("\tSair_____________[0]\n");
 		do {
 			printf("Digite a opção: ");
 			scanf("%d", &opt);
-		} while(opt < 0 || opt > 4);
+		} while(opt < 0 || opt > 3);
 		switch (opt) {
 			case 1:
 				do {
 					printf("Digite o valor do item: ");
 					scanf("%d", &value);
 				} while(value < 0);
-				createQueue(value);
-				break;
-			case 2:
-				do {
-					printf("Digite o valor do item: ");
-					scanf("%d", &value);
-				} while(value < 0);
 				put(value);
 				break;
-			case 3:
+			case 2:
 				value = get();
 				if (value >= 0) {
-					printf("\nO valor do item removido é %d\n", value);	
+					printf("\nO valor do item removido é %d\n", value);
 				}
 				break;
-			case 4:
+			case 3:
 				display();
 				break;
 			case 0:
