@@ -58,6 +58,27 @@ void put(int value) {
 	}
 }
 
+int get() {
+	struct queuesNode *qTemp = qFront;
+	if (qTemp == NULL) {
+		printf("\nImpossível remover item! Não há filas!\n");
+		return -1;
+	} else {
+		struct regularNode *temp = qTemp->front;
+		int value = qTemp->front->value;
+		qTemp->front = qTemp->front->pointer;
+		free(temp);
+		if (qTemp->front == NULL) {
+			qFront = qFront->pointer;
+			free(qTemp);
+			if (qFront == NULL) {
+				qRear = NULL;
+			}
+		}
+		return value;
+	}
+}
+
 void display() {
 	struct queuesNode *qTemp = qFront;
 	if (qTemp == NULL) {
@@ -107,7 +128,10 @@ int main(int argc, char** argv) {
 				put(value);
 				break;
 			case 3:
-				//get();
+				value = get();
+				if (value >= 0) {
+					printf("\nO valor do item removido é %d\n", value);	
+				}
 				break;
 			case 4:
 				display();
