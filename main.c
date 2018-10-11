@@ -1,3 +1,10 @@
+/* 
+ * Program Name: Queue Queues
+ * Author: mannuscritto
+ * Description: The program makes a queue of queues. Each new item is placed in the appropriate queue based on its value.
+ * If the new item does not have a queue for its value, a new queue is created.
+ */
+
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,44 +23,57 @@ struct queuesNode {
 	struct queuesNode *pointer;
 };
 
-struct queuesNode *top = NULL;
+struct queuesNode *qFront = NULL;
+struct queuesNode *qRear = NULL;
 
 void createQueue(int value) {
-	struct queuesNode *qTemp = (struct queuesNode *)malloc(sizeof(struct queuesNode));
 	struct regularNode *temp = (struct regularNode *)malloc(sizeof(struct regularNode));
 	temp->value = value;
 	temp->pointer = NULL;
+	struct queuesNode *qTemp = (struct queuesNode *)malloc(sizeof(struct queuesNode));
 	qTemp->front = temp;
 	qTemp->rear = temp;
-	qTemp->pointer = NULL;
-	if (top == NULL) {
-		top = qTemp;
+	if (qFront == NULL && qRear == NULL) {
+		qFront = qRear = qTemp;
 		return;
-	}
-	top->pointer = qTemp;
-	top = qTemp;
+	}		
+	qRear->pointer = qTemp;
+	qRear = qTemp;
 }
 
 void put(int value) {
-	struct queuesNode *qTemp = top;
+	struct queuesNode *qTemp = qFront;
 	struct regularNode *temp = (struct regularNode *)malloc(sizeof(struct regularNode));
 	temp->value = value;
 	temp->pointer = NULL;
-	while (qTemp->pointer != NULL) {
+	while (qTemp != NULL) {
 		if (qTemp->rear->value == value) {
 			qTemp->rear->pointer = temp;
 			qTemp->rear = temp;
 			return;
 		}
 		if (qTemp->pointer == NULL) {
-			printf("\nNão há nenhuma fila com esse número!\n");
 		}
 		qTemp = qTemp->pointer;
 	}
 }
 
 void display() {
-	struct queuesNode *qTemp = top;
+	struct queuesNode *qTemp = qFront;
+	if (qTemp == NULL) {
+		printf("\nNão há filas a serem imprimidas!\n");
+		return;
+	}
+	while (qTemp != NULL) {
+		struct regularNode *temp = qTemp->front;
+		printf("\nElementos de uma fila: \n|");
+		while (temp != NULL) {
+			printf(" %d |", temp->value);
+			temp = temp->pointer;
+		}
+		printf("\n");
+		qTemp = qTemp->pointer;
+	}
 }
 
 int main(int argc, char** argv) {
@@ -90,7 +110,7 @@ int main(int argc, char** argv) {
 				//get();
 				break;
 			case 4:
-				//display();
+				display();
 				break;
 			case 0:
 				exit(0);
